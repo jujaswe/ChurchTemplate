@@ -14,6 +14,20 @@ const staffCollection = defineCollection({
   }),
 });
 
+const memberCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    name: z.string(),
+    title: z.string(), // e.g., "Senior Pastor", "Deaconess"
+    image: z.string().startsWith('/uploads/staff/'),
+    email: z.string().email().optional(),
+    phone: z.string().optional(),
+    bio: z.string().optional(), // Short bio in frontmatter
+    order: z.number().default(0),
+    draft: z.boolean().default(false),
+  }),
+});
+
 const eventsCollection = defineCollection({
   type: 'content',
   schema: z.object({
@@ -89,6 +103,7 @@ const siteInfoCollection = defineCollection({
 
 export const collections = {
   staff: staffCollection,
+  member: memberCollection,
   events: eventsCollection,
   sermons: sermonsCollection,
   ministries: ministriesCollection,

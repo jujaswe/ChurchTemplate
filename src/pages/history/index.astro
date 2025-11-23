@@ -1,0 +1,248 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHeader from "../../components/Sections/PageHeader.astro";
+import Card from "../../components/UI/Card.astro";
+import { getCollection } from "astro:content";
+import { formatDate, isFutureDate, isPastDate } from "../../utils/dateUtils";
+
+// Get all events
+const allEvents = await getCollection("events", ({ data }) => {
+  return import.meta.env.PROD ? !data.draft : true;
+});
+
+// Separate upcoming and past events
+const upcomingEvents = allEvents.filter(event => isFutureDate(event.data.date))
+                            .sort((a, b) => new Date(a.data.date).getTime() - new Date(b.data.date).getTime());
+
+const pastEvents = allEvents.filter(event => isPastDate(event.data.date))
+                        .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+                        .slice(0, 6); // Show only the most recent past events
+---
+
+<BaseLayout
+  title="History"
+  description=""
+>
+  <PageHeader 
+    title="History" 
+    subtitle="Where it all started."
+    backgroundImage="/uploads/events-header-bg.webp"
+  />
+  
+  <!-- Church History -->
+  <!--section class="py-16">
+    <div class="container">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">Our History</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          The story of how our church has grown and evolved over the years
+        </p>
+      </div>
+      
+      <div class="max-w-4xl mx-auto">
+        <div class="relative pl-8 sm:pl-16 py-6 group">
+          <div class="flex flex-col sm:flex-row items-start mb-1 group-last:before:hidden before:absolute before:left-2 sm:before:left-7 before:h-full before:px-px before:bg-gray-300 before:self-start before:-translate-x-1/2 before:translate-y-3 after:absolute after:left-2 sm:after:left-7 after:w-4 after:h-4 after:bg-primary-600 after:border-4 after:border-white after:rounded-full after:-translate-x-1/2 after:translate-y-1.5">
+            <time class="sm:w-28 text-xs text-gray-500 uppercase">1950</time>
+            <div>
+              <h3 class="text-xl font-bold text-gray-900">Church Founded</h3>
+              <p class="text-gray-700">
+                Our church was founded by a small group of dedicated believers who met in homes for Bible study and prayer.
+              </p>
+            </div>
+          </div>
+        </div>
+          
+        <div class="relative pl-8 sm:pl-16 py-6 group">
+          <div class="flex flex-col sm:flex-row items-start mb-1 group-last:before:hidden before:absolute before:left-2 sm:before:left-7 before:h-full before:px-px before:bg-gray-300 before:self-start before:-translate-x-1/2 before:translate-y-3 after:absolute after:left-2 sm:after:left-7 after:w-4 after:h-4 after:bg-primary-600 after:border-4 after:border-white after:rounded-full after:-translate-x-1/2 after:translate-y-1.5">
+            <time class="sm:w-28 text-xs text-gray-500 uppercase">1965</time>
+            <div>
+              <h3 class="text-xl font-bold text-gray-900">First Building</h3>
+              <p class="text-gray-700">
+                As the congregation grew, we purchased our first building and expanded our ministries to serve the community.
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="relative pl-8 sm:pl-16 py-6 group">
+          <div class="flex flex-col sm:flex-row items-start mb-1 group-last:before:hidden before:absolute before:left-2 sm:before:left-7 before:h-full before:px-px before:bg-gray-300 before:self-start before:-translate-x-1/2 before:translate-y-3 after:absolute after:left-2 sm:after:left-7 after:w-4 after:h-4 after:bg-primary-600 after:border-4 after:border-white after:rounded-full after:-translate-x-1/2 after:translate-y-1.5">
+            <time class="sm:w-28 text-xs text-gray-500 uppercase">1988</time>
+            <div>
+              <h3 class="text-xl font-bold text-gray-900">New Campus</h3>
+              <p class="text-gray-700">
+                We moved to our current location and built a larger sanctuary to accommodate our growing congregation.
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="relative pl-8 sm:pl-16 py-6 group">
+          <div class="flex flex-col sm:flex-row items-start mb-1 group-last:before:hidden before:absolute before:left-2 sm:before:left-7 before:h-full before:px-px before:bg-gray-300 before:self-start before:-translate-x-1/2 before:translate-y-3 after:absolute after:left-2 sm:after:left-7 after:w-4 after:h-4 after:bg-primary-600 after:border-4 after:border-white after:rounded-full after:-translate-x-1/2 after:translate-y-1.5">
+            <time class="sm:w-28 text-xs text-gray-500 uppercase">2010</time>
+            <div>
+              <h3 class="text-xl font-bold text-gray-900">Community Center</h3>
+              <p class="text-gray-700">
+                We opened our community center to better serve our neighbors through various outreach programs and ministries.
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="relative pl-8 sm:pl-16 py-6 group">
+          <div class="flex flex-col sm:flex-row items-start mb-1 group-last:before:hidden before:absolute before:left-2 sm:before:left-7 before:h-full before:px-px before:bg-gray-300 before:self-start before:-translate-x-1/2 before:translate-y-3 after:absolute after:left-2 sm:after:left-7 after:w-4 after:h-4 after:bg-primary-600 after:border-4 after:border-white after:rounded-full after:-translate-x-1/2 after:translate-y-1.5">
+            <time class="sm:w-28 text-xs text-gray-500 uppercase">Present</time>
+            <div>
+              <h3 class="text-xl font-bold text-gray-900">Continuing the Mission</h3>
+              <p class="text-gray-700">
+                Today, we continue to grow and adapt while staying true to our mission of knowing Christ and making Him known.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section-->
+  
+  <!-- Statement of Faith -->
+  <section class="py-16">
+    <div class="container">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">Historical Background</h2>
+      </div>
+
+      <div class="max-w-4xl mx-auto prose prose-lg">
+        <center>
+          <img 
+            src="/uploads/history/history2.jpg"
+            class="rounded-lg shadow-lg object-cover"
+            width="75%"
+            height="75%"
+          />
+        </center>
+
+        <h3>PROVENANCE AND HISTORICAL CONTEXT</h3>
+        <p>
+          Santo Entierro -- This is a sacred image depicting the lifeless body of Christ. It holds profound
+          historical and familial significance for the people of Virac, Catanduanes. This revered image
+          was commissioned by the late spouses AMBROSIO TABLIZO and INES LEONARDO,
+          devout Catholics and respected members of the community. They were blessed with five
+          children: SEVERO, ANDRES, FELIX, MARIA and JUANA. Inspired by their deep faith
+          and the enduring traditions of Holy Week introduced during the Spanish colonial period,
+          Ambrosio and Ines envisioned the Santo Entierro not only as an object of veneration but as a
+          unifying symbol for their family. Their intention was to create a spiritual heirloom — one that
+          would serve as a compelling reason for their children and future generations to return home
+          to Virac every Semana Santa (Holy Week), regardless of where life had taken them. Years
+          passed and the children got married except Andres who became a priest. The firstborn,
+          SEVERO, was married to CARMEN ARCILLA with seven (7) offsprings. The second
+          child, FR. ANDRES unexpectedly had five (5) offsprings while the third child, FELIX was
+          married to RUFINA ACHAVAL with five (5) offspring. The fourth child, MARIA was
+          married to EUSEBIO TALION with eleven (11) offsprings while the youngest, JUANA, was
+          married to ARSENIO TEVES were childless.
+        </p>
+
+        <center>
+          <img 
+            src="/uploads/history/history1.jpg"
+            class="rounded-lg shadow-lg object-cover"
+            width="75%"
+            height="75%"
+          />
+        </center>
+        
+        <h3>SIGNIFICANCE OF THE HOLY IMAGE TO THE TABLIZO FAMILY</h3>
+        <p>
+          The holy image has long served as the unifying symbol for the Tablizo siblings, honoring the
+          wishes of their parents who instructed them to take turns hosting the family’s Holy Week
+          observance. Over the decades, this tradition has strengthened their bond and sense of duty.
+          The Santo Entierro has become more than just a sacred image—it is a revered centerpiece of
+          the Good Friday procession in Virac, solemnly carried through the streets as part of the town’s
+          deeply rooted Lenten traditions. It stands as a living legacy of faith, family unity, and cultural
+          identity, passed down through generations.
+        </p>
+
+        <h3>THE ORIGINAL HOME OF THE HOLY IMAGE</h3>
+        <p>
+          According to the Book of the Virac Cathedral, records indicate that during a pastoral visit in
+          1817, the Bishop of Nueva Caceres was notably impressed by the Church of Virac. The parish
+          then presided over numerous ermitas (chapels) situated both within the poblacion and in the
+          outlying areas. These community chapels, built primarily in the last quarter of the 19th century
+          and into the early American period, were often mistaken for parish churches due to their
+          substantial size and durable stone construction. Notable examples of these still stand in the
+          barangays of Gogon, Rawis, and Sta. Elena. (The Virac Cathedral, pp. 24–25).
+          <br /><br />
+          From this historical context, it is reasonable to deduce that the revered image of the Santo
+          Entierro was acquired by the devout couple Ambrosio Tablizo and Ines Leonardo during this
+          flourishing period of religious devotion — estimated to be not less than 160 years ago. At that
+          time, the couple resided in Barangay San Pedro, in a house that now belongs to the heirs of
+          their son, Severo Tablizo. Remarkably, this original ancestral home still stands today, a silent
+          witness to the family’s enduring faith and devotion. Behind the house, the couple built a small
+          shrine or shelter known as a camarin, where the Santo Entierro was reverently enshrined and
+          safeguarded. In or around the year 1927, a mysterious incident occurred: for three consecutive
+          nights, the windows of the camarin were found open — an unsettling occurrence interpreted
+          by the family as a bad omen. In response, the image was promptly relocated to the residence
+          of a relative of Ines Leonardo in Barangay Gogon. The following night, a fire of unknown
+          origin consumed the camarin. Remarkably, the Santo Entierro had already been transferred
+          and was spared from the blaze — an event widely regarded as miraculous. Instead of
+          reconstructing the destroyed camarin, the family chose to house the image in a large wooden
+          box, which was then placed at the St. Raphael Chapel in Gogon. It remained there even
+          through the Japanese occupation during World War II. In later years, however, parishioners
+          began to express concern that the box obscured the sacred presence of the image and was
+          visually unappealing.
+          <br /><br />
+          In response, a Memorandum of Agreement was entered into between the Bishop of Virac and
+          the Caretaker of the St. Raphael Chapel, on one side, and the heirs of Ambrosio Tablizo and
+          Ines Leonardo, on the other. This agreement formally authorized the image’s public display
+          at the chapel, allowing for its continued veneration by the faithful. In time, the sacred
+          responsibility of caring for the Santo Entierro was passed down to Juanito A. Tablizo, the
+          youngest son of Severo and a third-generation descendant. He faithfully carried out this duty
+          until his passing. The role was then entrusted to his grandnephew, Rodolfo Kim Arevalo
+          Chiong, a fifth-generation descendant. Today, he continues this sacred family tradition. Each
+          Holy Week, he solemnly retrieves the image from the St. Raphael Chapel on Holy Tuesday,
+          ensures its preparation and presence for the Good Friday procession, and returns it with
+          reverence to the chapel on Black Saturday.
+        </p>
+        
+        <h3>THE WRITTEN AGREEMENT OF THE FIVE (5) CHILDREN OF AMBROSIO TABLIZO & INES LEONARDO</h3>
+        <p>
+          A written agreement, composed in the Bicol language, exists among the five children of
+          Ambrosio and Ines Tablizo. This document affirms that only the direct heirs and descendants
+          of Severo, Andres, Felix, and Maria shall hold the exclusive right and privilege to take part in
+          the traditional hosting of the Holy Week event during Semana Santa. It is clearly stipulated
+          that their youngest sister, Juana, who remained childless, and consequently has no heirs, shall
+          not be included in the rotation. This agreement, rooted in mutual respect and commitment to
+          their parents’ wishes, continues to serve as a guiding principle for the family’s enduring
+          Lenten tradition.
+        </p>
+        
+        <h3>BIRTH OF THE FOUNDATION</h3>
+        <p>
+          Today, members of the fourth generations continue to honor the original purpose of the image.
+          It remains not only a vessel of devotion but a reminder of the love, foresight, and values of
+          Ambrosio and Ines — ensuring that each Holy Week becomes a moment of reunion,
+          reflection, and renewal for the Tablizo-Leonardo family and their descendants. For several
+          decades, the family envisioned formalizing their association of descendants representing the
+          heirs of the four siblings with offspring. Although drafts of the constitution and by-laws had
+          been prepared, these efforts were not realized until July 2023. Through Facebook Messenger,
+          representatives from the four siblings (excluding the childless daughter - Juana), organized
+          and elected officers, leading to the establishment of the Santo Entierro de Virac Foundation,
+          Inc., which was subsequently registered with the Securities and Exchange Commission
+        </p>
+
+        <br />
+        <p>
+        <b>DISCLAIMER:</b> The historical background presented in this document is based on oral
+        narratives, personal accounts and some available documents shared by members of the third
+        generation of the Tablizo family during their lifetime. It also draws from the collective
+        memory and knowledge of the fourth generation, as passed down to them by their elders.
+        While every effort has been made to preserve the accuracy and integrity of these accounts,
+        this compilation remains a work in progress. Ongoing research continues to verify and enrich
+        the narrative with additional facts and historical details as they become available. This
+        document is therefore intended as a living record—open to refinement as the family’s story
+        continues to unfold and as new information is discovered.
+        </p>
+
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
