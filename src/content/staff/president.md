@@ -1,7 +1,7 @@
 ---
 name: "Ar. Domingo L. Tablizo Jr."
 title: "President / Chairman of the Board"
-image: "/uploads/staff/sarah-martinez.webp"
+image: "/uploads/staff/domingo.jpg"
 email: "sarah.martinez@churchname.org"
 phone: "+1-555-0102"
 bio: "Severo Tablizo clan"
